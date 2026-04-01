@@ -18,7 +18,8 @@
     --science: #f472b6; --science-bg: rgba(244,114,182,0.08);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding: 2rem 1rem; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding: 2rem 1rem; -webkit-font-smoothing: antialiased; }
   .container { max-width: 900px; margin: 0 auto; }
   header { text-align: center; margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
   header h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
@@ -108,7 +109,52 @@
 
   footer { text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.78rem; }
   footer p { margin-bottom: 0.3rem; }
-  @media (max-width: 600px) { .summary-grid { grid-template-columns: repeat(2, 1fr); } .patient-bar { gap: 0.5rem; } body { padding: 1rem 0.75rem; } .info-grid { grid-template-columns: 1fr; } .shopping-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 430px) {
+    body { padding: 1rem 0.75rem; padding-top: env(safe-area-inset-top, 1rem); padding-bottom: env(safe-area-inset-bottom, 1rem); -webkit-text-size-adjust: 100%; }
+    header { margin-bottom: 2rem; padding-bottom: 1.25rem; }
+    header h1 { font-size: 1.3rem; }
+    header p { font-size: 0.85rem; }
+    .patient-bar { gap: 0.4rem; }
+    .patient-bar span { font-size: 0.75rem; padding: 0.25rem 0.6rem; }
+    .philosophy { padding: 1rem; margin-bottom: 1.75rem; }
+    .philosophy li { font-size: 0.82rem; line-height: 1.5; padding: 0.3rem 0 0.3rem 1.2rem; }
+    .section-title { font-size: 1.15rem; }
+    .targets-bar { gap: 0.35rem; }
+    .target-pill { font-size: 0.8rem; padding: 0.35rem 0.6rem; }
+    .timeline { padding-left: 1.25rem; }
+    .timeline::before { left: 3px; }
+    .meal-card { padding: 1rem; margin-bottom: 0.6rem; }
+    .meal-card::before { left: -1.25rem; width: 10px; height: 10px; }
+    .meal-time { font-size: 0.78rem; }
+    .meal-name { font-size: 0.95rem; }
+    .meal-foods li { font-size: 0.88rem; padding: 0.2rem 0 0.2rem 1rem; line-height: 1.5; }
+    .meal-macros { gap: 0.3rem; }
+    .macro-tag { font-size: 0.78rem; padding: 0.25rem 0.5rem; }
+    .supplements-note { font-size: 0.82rem; }
+    .science-note { font-size: 0.8rem; padding: 0.5rem 0.65rem; line-height: 1.5; }
+    .prep-tag { font-size: 0.78rem; padding: 0.25rem 0.55rem; }
+    .gap-marker { font-size: 0.75rem; padding: 0.4rem 0; }
+    .meal-number { font-size: 0.65rem; }
+    .summary-card { margin-left: 1.25rem; padding: 1rem; }
+    .summary-grid { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
+    .summary-value { font-size: 1.35rem; }
+    .summary-label { font-size: 0.7rem; }
+    .summary-target { font-size: 0.72rem; }
+    .hydration-bar { margin-left: 1.25rem; font-size: 0.82rem; padding: 0.6rem 0.75rem; }
+    .info-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .info-card { padding: 1rem; }
+    .info-card h3 { font-size: 0.88rem; }
+    .info-card li { font-size: 0.85rem; padding: 0.3rem 0 0.3rem 1.2rem; }
+    .shopping-list { padding: 1rem; }
+    .shopping-grid { grid-template-columns: 1fr; gap: 0.15rem; }
+    .shopping-grid li { font-size: 0.85rem; padding: 0.3rem 0 0.3rem 1.2rem; }
+    .notes-section { padding: 1rem; }
+    .notes-section h3 { font-size: 0.88rem; }
+    .notes-section li { font-size: 0.85rem; line-height: 1.5; padding: 0.3rem 0 0.3rem 1.2rem; }
+    .divider { margin: 1.75rem 0; }
+    footer { font-size: 0.8rem; margin-top: 2rem; padding-top: 1.5rem; }
+    footer p { margin-bottom: 0.4rem; line-height: 1.5; }
+  }
   @media print { body { background: #fff; color: #111; } .meal-card, .info-card, .shopping-list, .notes-section, .philosophy { border-color: #ddd; background: #f9f9f9; } .science-note { color: #888; background: #f5f5f5; } }
 </style>
 </head>
@@ -435,16 +481,11 @@
   <ul>
     <li><strong>Porciones escaladas para acercarse a 2.000 kcal</strong> ya que no hacés colaciones. Aumentos: aceite 5ml→10ml, maní 10g→20g (en merienda). Avena en 30g según receta original del nutricionista. Lentejas + arroz como carbo de cena (la opción más nutritiva del plan).</li>
     <li><strong>Total diario ~1.940 kcal</strong> — a solo 60 kcal del objetivo de 2.000. La tostada con miel pre-entreno cerró la brecha calórica con carbos rápidos exactamente donde más se necesitan.</li>
-    <li><strong>Todos los pesos son en crudo.</strong> 200g pollo crudo ≈ 150g cocido. 200g carne cruda ≈ 150g cocida. 350g papa cruda ≈ 280g cocida.</li>
+    <li><strong>Todos los pesos son en crudo.</strong> 200g pollo crudo ≈ 150g cocido. 200g carne cruda ≈ 150g cocida.</li>
     <li><strong>Los condimentos son libres.</strong> Sal, pimienta, pimentón, ajo en polvo, orégano — variá las especias, los macros no cambian.</li>
   </ul>
 </div>
 
-<footer>
-  <p>Generado: 01-04-2026 · Actualizado: 01-04-2026 · Optimizado para entreno matutino (07:00)</p>
-  <p>Nutricionista: Nut. Segatore Emanuel · Porciones según plan · Timing optimizado para atleta híbrido</p>
-  <p>banana+toast+miel → [entreno] → bowl de yogur (baja grasa) → carne+ensalada completa (+ supps liposolubles) → tostadas francesas (+ maní) → pollo+lentejas+arroz (+ magnesio)</p>
-</footer>
 
 </div>
 </body>
