@@ -1,0 +1,302 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analisis de Equivalencia de Desayunos</title>
+<style>
+:root{--bg:#fafafa;--card:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--accent:#2563eb;--green:#16a34a;--green-bg:#dcfce7;--yellow:#ca8a04;--yellow-bg:#fef9c3;--red:#dc2626;--red-bg:#fee2e2;--protein:#3b82f6;--carb:#f59e0b;--fat:#ef4444;--fiber:#22c55e;--cal:#8b5cf6}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:1100px;margin:0 auto;padding:24px 20px}
+header{background:linear-gradient(135deg,#1e3a5f 0%,#2563eb 100%);color:#fff;padding:40px 20px;text-align:center}
+header h1{font-size:1.8rem;font-weight:700;margin-bottom:8px}
+header .subtitle{font-size:1rem;opacity:.85}
+header .meta{font-size:.85rem;opacity:.7;margin-top:12px}
+section{margin-bottom:32px}
+h2{font-size:1.3rem;font-weight:700;color:var(--accent);border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:16px}
+h3{font-size:1.05rem;font-weight:600;margin-bottom:10px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.summary-table{width:100%;border-collapse:collapse;font-size:.9rem}
+.summary-table th{background:#1e3a5f;color:#fff;padding:10px 8px;text-align:center;font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.5px}
+.summary-table th:first-child{text-align:left;border-radius:8px 0 0 0}
+.summary-table th:last-child{border-radius:0 8px 0 0}
+.summary-table td{padding:10px 8px;text-align:center;border-bottom:1px solid var(--border)}
+.summary-table td:first-child{text-align:left;font-weight:500}
+.summary-table tr:last-child td{border-bottom:none}
+.summary-table .row-avg{background:#f0f4ff;font-weight:600}
+.summary-table .row-range{background:#fef3c7;font-weight:600;font-size:.85rem}
+.dev-low{background:var(--green-bg);color:var(--green);font-weight:600}
+.dev-mid{background:var(--yellow-bg);color:var(--yellow);font-weight:600}
+.dev-high{background:var(--red-bg);color:var(--red);font-weight:600}
+.ingredient-table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:8px}
+.ingredient-table th{background:#f1f5f9;padding:8px 6px;text-align:center;font-weight:600;font-size:.78rem;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--border)}
+.ingredient-table th:first-child{text-align:left}
+.ingredient-table th:nth-child(2){text-align:left}
+.ingredient-table td{padding:7px 6px;text-align:center;border-bottom:1px solid #f1f5f9}
+.ingredient-table td:first-child{text-align:left;font-weight:500}
+.ingredient-table td:nth-child(2){text-align:left;color:var(--muted);font-size:.82rem}
+.ingredient-table .total-row{background:#f0f4ff;font-weight:700;border-top:2px solid var(--accent)}
+.ingredient-table .total-row td{border-bottom:none}
+details{margin-bottom:12px}
+details summary{cursor:pointer;padding:14px 18px;background:var(--card);border:1px solid var(--border);border-radius:10px;font-weight:600;font-size:.95rem;display:flex;align-items:center;gap:10px;user-select:none;box-shadow:0 1px 3px rgba(0,0,0,.04);transition:background .15s}
+details summary:hover{background:#f8fafc}
+details[open] summary{border-radius:10px 10px 0 0;border-bottom-color:transparent}
+details .detail-content{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;padding:16px 18px}
+.option-badge{display:inline-block;background:var(--accent);color:#fff;font-size:.72rem;padding:2px 8px;border-radius:4px;font-weight:700;text-transform:uppercase}
+.option-source{font-size:.78rem;color:var(--muted);font-weight:400;margin-left:auto}
+.option-cals{font-size:.85rem;font-weight:700;color:var(--accent);margin-left:8px;white-space:nowrap}
+.bar-chart-group{margin-bottom:20px}
+.bar-chart-label{font-size:.82rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.bar-row{display:flex;align-items:center;margin-bottom:4px;gap:8px}
+.bar-name{width:110px;font-size:.78rem;text-align:right;flex-shrink:0}
+.bar-track{flex:1;height:22px;background:#f1f5f9;border-radius:4px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:.72rem;font-weight:700;color:#fff;min-width:36px}
+.bar-fill.protein{background:var(--protein)}
+.bar-fill.carbs{background:var(--carb)}
+.bar-fill.fat{background:var(--fat)}
+.bar-fill.fiber{background:var(--fiber)}
+.bar-fill.cals{background:var(--cal)}
+.bar-avg-line{position:absolute;top:0;height:100%;width:2px;background:var(--text);opacity:.5;z-index:2}
+.finding{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--border)}
+.finding:last-child{border-bottom:none}
+.finding-num{width:28px;height:28px;background:var(--accent);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0}
+.finding-text{font-size:.9rem}
+.finding-text strong{color:var(--accent)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.8rem;color:var(--muted);margin-bottom:12px}
+.legend-item{display:flex;align-items:center;gap:4px}
+.legend-swatch{width:14px;height:14px;border-radius:3px}
+footer{text-align:center;font-size:.78rem;color:var(--muted);padding:20px;border-top:1px solid var(--border);margin-top:32px}
+@media print{body{background:#fff}header{background:#1e3a5f!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.card,details summary,.detail-content{box-shadow:none;border-color:#ccc}details{break-inside:avoid}.bar-fill,.dev-low,.dev-mid,.dev-high,.summary-table th,.row-avg,.row-range{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media(max-width:700px){header h1{font-size:1.4rem}.summary-table{font-size:.78rem}.summary-table th,.summary-table td{padding:7px 4px}.bar-name{width:80px;font-size:.7rem}.container{padding:16px 12px}}
+</style>
+</head>
+<body><header>
+<h1>An&aacute;lisis de Equivalencia de Desayunos</h1>
+<div class="subtitle">Verificaci&oacute;n nutricional de las 6 opciones de desayuno/merienda prescritas</div>
+<div class="meta">Paciente: Lucas Di Pietro &nbsp;|&nbsp; Nutricionista: Nut. Segatore Emanuel &nbsp;|&nbsp; Fecha: 3 de abril de 2026</div>
+</header>
+<div class="container">
+<section>
+<div class="card" style="background:#f0f4ff;border-color:#bfdbfe">
+<h3 style="margin-bottom:6px">Contexto</h3>
+<p style="font-size:.9rem">El plan alimentario y el recetario NutriChef indican que todas las opciones de desayuno/merienda son <strong>intercambiables</strong> entre s&iacute;, aportando de manera aproximada los mismos macronutrientes. Este an&aacute;lisis calcula prote&iacute;nas, carbohidratos, grasas, fibra y calor&iacute;as de cada opci&oacute;n usando valores verificados de <strong>USDA FoodData Central</strong> y <strong>FatSecret Argentina</strong>, con los productos espec&iacute;ficos del paciente (Star Nutrition Whey, Quaker Avena Instant&aacute;nea, La Seren&iacute;sima Parc. Desc., yogur casero, etc.).</p>
+</div>
+</section>
+<section>
+<h2>Tabla Comparativa</h2>
+<div class="card" style="overflow-x:auto">
+<div class="legend">
+<div class="legend-item"><div class="legend-swatch" style="background:var(--green-bg);border:1px solid var(--green)"></div> Cercano al promedio (&plusmn;10%)</div>
+<div class="legend-item"><div class="legend-swatch" style="background:var(--yellow-bg);border:1px solid var(--yellow)"></div> Desviaci&oacute;n moderada (&plusmn;10-25%)</div>
+<div class="legend-item"><div class="legend-swatch" style="background:var(--red-bg);border:1px solid var(--red)"></div> Desviaci&oacute;n alta (&gt;25%)</div>
+</div>
+<table class="summary-table">
+<thead><tr><th>Opci&oacute;n</th><th>Prote&iacute;na (g)</th><th>Carbohidratos (g)</th><th>Grasa (g)</th><th>Fibra (g)</th><th>Calor&iacute;as</th></tr></thead>
+<tbody>
+<tr><td>1. Omelette con pan y fruta</td><td class="dev-high">20.5</td><td class="dev-high">43.0</td><td class="dev-low">12.0</td><td class="dev-mid">5.3</td><td class="dev-high">364</td></tr>
+<tr><td>2. Yogur con cereales y prote</td><td class="dev-mid">25.3</td><td class="dev-low">50.8</td><td class="dev-mid">10.6</td><td class="dev-mid">6.1</td><td class="dev-low">398</td></tr>
+<tr><td>3. Panqueques proteicos</td><td class="dev-low">29.4</td><td class="dev-low">58.4</td><td class="dev-mid">14.9</td><td class="dev-high">12.0</td><td class="dev-low">474</td></tr>
+<tr><td>4. Tostadas francesas</td><td class="dev-mid">35.6</td><td class="dev-low">58.4</td><td class="dev-low">14.0</td><td class="dev-low">7.3</td><td class="dev-mid">504</td></tr>
+<tr><td>5. Licuado proteico</td><td class="dev-high">39.7</td><td class="dev-low">58.2</td><td class="dev-low">11.7</td><td class="dev-mid">5.8</td><td class="dev-mid">495</td></tr>
+<tr><td>6. Brownie proteico en taza</td><td class="dev-high">22.4</td><td class="dev-mid">63.3</td><td class="dev-low">14.1</td><td class="dev-high">12.9</td><td class="dev-low">451</td></tr>
+<tr class="row-avg"><td>Promedio</td><td>28.8</td><td>55.4</td><td>12.9</td><td>8.2</td><td>448</td></tr>
+<tr class="row-range"><td>Rango (max - min)</td><td>19.2</td><td>20.3</td><td>4.3</td><td>7.6</td><td>140</td></tr>
+</tbody>
+</table>
+</div>
+</section><section>
+<h2>Comparaci&oacute;n Visual</h2>
+<div class="card">
+<div class="bar-chart-group">
+<div class="bar-chart-label" style="color:var(--protein)">Prote&iacute;na (g) &mdash; Promedio: 28.8g</div>
+<div class="bar-row"><div class="bar-name">1. Omelette</div><div class="bar-track"><div class="bar-fill protein" style="width:51.6%">20.5</div><div class="bar-avg-line" style="left:72.5%"></div></div></div>
+<div class="bar-row"><div class="bar-name">2. Yogur</div><div class="bar-track"><div class="bar-fill protein" style="width:63.7%">25.3</div><div class="bar-avg-line" style="left:72.5%"></div></div></div>
+<div class="bar-row"><div class="bar-name">3. Panqueques</div><div class="bar-track"><div class="bar-fill protein" style="width:74.1%">29.4</div><div class="bar-avg-line" style="left:72.5%"></div></div></div>
+<div class="bar-row"><div class="bar-name">4. Tostadas</div><div class="bar-track"><div class="bar-fill protein" style="width:89.7%">35.6</div><div class="bar-avg-line" style="left:72.5%"></div></div></div>
+<div class="bar-row"><div class="bar-name">5. Licuado</div><div class="bar-track"><div class="bar-fill protein" style="width:100%">39.7</div><div class="bar-avg-line" style="left:72.5%"></div></div></div>
+<div class="bar-row"><div class="bar-name">6. Brownie</div><div class="bar-track"><div class="bar-fill protein" style="width:56.4%">22.4</div><div class="bar-avg-line" style="left:72.5%"></div></div></div>
+</div>
+<div class="bar-chart-group">
+<div class="bar-chart-label" style="color:var(--carb)">Carbohidratos (g) &mdash; Promedio: 55.4g</div>
+<div class="bar-row"><div class="bar-name">1. Omelette</div><div class="bar-track"><div class="bar-fill carbs" style="width:67.9%">43.0</div><div class="bar-avg-line" style="left:87.5%"></div></div></div>
+<div class="bar-row"><div class="bar-name">2. Yogur</div><div class="bar-track"><div class="bar-fill carbs" style="width:80.3%">50.8</div><div class="bar-avg-line" style="left:87.5%"></div></div></div>
+<div class="bar-row"><div class="bar-name">3. Panqueques</div><div class="bar-track"><div class="bar-fill carbs" style="width:92.3%">58.4</div><div class="bar-avg-line" style="left:87.5%"></div></div></div>
+<div class="bar-row"><div class="bar-name">4. Tostadas</div><div class="bar-track"><div class="bar-fill carbs" style="width:92.3%">58.4</div><div class="bar-avg-line" style="left:87.5%"></div></div></div>
+<div class="bar-row"><div class="bar-name">5. Licuado</div><div class="bar-track"><div class="bar-fill carbs" style="width:91.9%">58.2</div><div class="bar-avg-line" style="left:87.5%"></div></div></div>
+<div class="bar-row"><div class="bar-name">6. Brownie</div><div class="bar-track"><div class="bar-fill carbs" style="width:100%">63.3</div><div class="bar-avg-line" style="left:87.5%"></div></div></div>
+</div>
+<div class="bar-chart-group">
+<div class="bar-chart-label" style="color:var(--fat)">Grasa (g) &mdash; Promedio: 12.9g</div>
+<div class="bar-row"><div class="bar-name">1. Omelette</div><div class="bar-track"><div class="bar-fill fat" style="width:80.5%">12.0</div><div class="bar-avg-line" style="left:86.6%"></div></div></div>
+<div class="bar-row"><div class="bar-name">2. Yogur</div><div class="bar-track"><div class="bar-fill fat" style="width:71.1%">10.6</div><div class="bar-avg-line" style="left:86.6%"></div></div></div>
+<div class="bar-row"><div class="bar-name">3. Panqueques</div><div class="bar-track"><div class="bar-fill fat" style="width:100%">14.9</div><div class="bar-avg-line" style="left:86.6%"></div></div></div>
+<div class="bar-row"><div class="bar-name">4. Tostadas</div><div class="bar-track"><div class="bar-fill fat" style="width:94.0%">14.0</div><div class="bar-avg-line" style="left:86.6%"></div></div></div>
+<div class="bar-row"><div class="bar-name">5. Licuado</div><div class="bar-track"><div class="bar-fill fat" style="width:78.5%">11.7</div><div class="bar-avg-line" style="left:86.6%"></div></div></div>
+<div class="bar-row"><div class="bar-name">6. Brownie</div><div class="bar-track"><div class="bar-fill fat" style="width:94.6%">14.1</div><div class="bar-avg-line" style="left:86.6%"></div></div></div>
+</div>
+<div class="bar-chart-group">
+<div class="bar-chart-label" style="color:var(--fiber)">Fibra (g) &mdash; Promedio: 8.2g</div>
+<div class="bar-row"><div class="bar-name">1. Omelette</div><div class="bar-track"><div class="bar-fill fiber" style="width:41.1%">5.3</div><div class="bar-avg-line" style="left:63.6%"></div></div></div>
+<div class="bar-row"><div class="bar-name">2. Yogur</div><div class="bar-track"><div class="bar-fill fiber" style="width:47.3%">6.1</div><div class="bar-avg-line" style="left:63.6%"></div></div></div>
+<div class="bar-row"><div class="bar-name">3. Panqueques</div><div class="bar-track"><div class="bar-fill fiber" style="width:93.0%">12.0</div><div class="bar-avg-line" style="left:63.6%"></div></div></div>
+<div class="bar-row"><div class="bar-name">4. Tostadas</div><div class="bar-track"><div class="bar-fill fiber" style="width:56.6%">7.3</div><div class="bar-avg-line" style="left:63.6%"></div></div></div>
+<div class="bar-row"><div class="bar-name">5. Licuado</div><div class="bar-track"><div class="bar-fill fiber" style="width:45.0%">5.8</div><div class="bar-avg-line" style="left:63.6%"></div></div></div>
+<div class="bar-row"><div class="bar-name">6. Brownie</div><div class="bar-track"><div class="bar-fill fiber" style="width:100%">12.9</div><div class="bar-avg-line" style="left:63.6%"></div></div></div>
+</div>
+<div class="bar-chart-group" style="margin-bottom:0">
+<div class="bar-chart-label" style="color:var(--cal)">Calor&iacute;as &mdash; Promedio: 448</div>
+<div class="bar-row"><div class="bar-name">1. Omelette</div><div class="bar-track"><div class="bar-fill cals" style="width:72.2%">364</div><div class="bar-avg-line" style="left:88.9%"></div></div></div>
+<div class="bar-row"><div class="bar-name">2. Yogur</div><div class="bar-track"><div class="bar-fill cals" style="width:79.0%">398</div><div class="bar-avg-line" style="left:88.9%"></div></div></div>
+<div class="bar-row"><div class="bar-name">3. Panqueques</div><div class="bar-track"><div class="bar-fill cals" style="width:94.0%">474</div><div class="bar-avg-line" style="left:88.9%"></div></div></div>
+<div class="bar-row"><div class="bar-name">4. Tostadas</div><div class="bar-track"><div class="bar-fill cals" style="width:100%">504</div><div class="bar-avg-line" style="left:88.9%"></div></div></div>
+<div class="bar-row"><div class="bar-name">5. Licuado</div><div class="bar-track"><div class="bar-fill cals" style="width:98.2%">495</div><div class="bar-avg-line" style="left:88.9%"></div></div></div>
+<div class="bar-row"><div class="bar-name">6. Brownie</div><div class="bar-track"><div class="bar-fill cals" style="width:89.5%">451</div><div class="bar-avg-line" style="left:88.9%"></div></div></div>
+</div>
+<div style="text-align:center;font-size:.75rem;color:var(--muted);margin-top:10px">La linea vertical indica el promedio de las 6 opciones</div>
+</div>
+</section><section>
+<h2>Desglose por Ingrediente</h2>
+
+<details><summary><span class="option-badge">Opcion 1</span> Omelette con pan y fruta <span class="option-source">plan-nutricional.pdf</span><span class="option-cals">364 kcal</span></summary>
+<div class="detail-content">
+<table class="ingredient-table">
+<thead><tr><th>Ingrediente</th><th>Cantidad</th><th>P (g)</th><th>C (g)</th><th>F (g)</th><th>Fibra (g)</th><th>Cal</th></tr></thead>
+<tbody>
+<tr><td>Huevo entero</td><td>1 unid. (~50g)</td><td>6.3</td><td>0.4</td><td>4.8</td><td>0</td><td>72</td></tr>
+<tr><td>Clara de huevo</td><td>2 unid. (~66g)</td><td>7.2</td><td>0.5</td><td>0.1</td><td>0</td><td>34</td></tr>
+<tr><td>Pan integral (molde)</td><td>2 rebanadas (50g)</td><td>6.3</td><td>21.4</td><td>1.8</td><td>3.0</td><td>126</td></tr>
+<tr><td>Aceite de oliva</td><td>1 cdita (5ml)</td><td>0</td><td>0</td><td>5.0</td><td>0</td><td>45</td></tr>
+<tr><td>Banana chica</td><td>1 unid. (~90g)</td><td>0.7</td><td>20.7</td><td>0.3</td><td>2.3</td><td>87</td></tr>
+<tr class="total-row"><td>TOTAL</td><td></td><td>20.5</td><td>43.0</td><td>12.0</td><td>5.3</td><td>364</td></tr>
+</tbody></table>
+<p style="font-size:.8rem;color:var(--muted);margin-top:8px">No incluye adiciones opcionales (ricotta magra o queso untable light). Whey protein: 0g. Menor proteina y menores calorias del grupo.</p>
+</div></details>
+
+<details><summary><span class="option-badge">Opcion 2</span> Yogur con cereales y proteina en polvo <span class="option-source">plan-nutricional.pdf</span><span class="option-cals">398 kcal</span></summary>
+<div class="detail-content">
+<table class="ingredient-table">
+<thead><tr><th>Ingrediente</th><th>Cantidad</th><th>P (g)</th><th>C (g)</th><th>F (g)</th><th>Fibra (g)</th><th>Cal</th></tr></thead>
+<tbody>
+<tr><td>Yogur casero (leche parc. desc.)</td><td>200ml</td><td>6.0</td><td>9.6</td><td>2.0</td><td>0</td><td>80</td></tr>
+<tr><td>Avena instantanea Quaker</td><td>30g (3 cdas)</td><td>3.9</td><td>16.8</td><td>2.4</td><td>3.3</td><td>104</td></tr>
+<tr><td>Proteina Star Nutrition</td><td>15g (1/2 scoop)</td><td>12.5</td><td>1.3</td><td>0.9</td><td>0</td><td>64</td></tr>
+<tr><td>Pasta de mani</td><td>10g (2 cditas)</td><td>2.2</td><td>2.4</td><td>5.0</td><td>0.5</td><td>63</td></tr>
+<tr><td>Banana chica</td><td>1 unid. (~90g)</td><td>0.7</td><td>20.7</td><td>0.3</td><td>2.3</td><td>87</td></tr>
+<tr class="total-row"><td>TOTAL</td><td></td><td>25.3</td><td>50.8</td><td>10.6</td><td>6.1</td><td>398</td></tr>
+</tbody></table>
+<p style="font-size:.8rem;color:var(--muted);margin-top:8px">Variante con 15g almendras+nueces en lugar de 10g pasta de mani: P=25.8 / C=50.9 / F=14.2 / Fibra=7.5 / Cal=427 (+29 kcal, +3.6g grasa).</p>
+</div></details>
+
+<details><summary><span class="option-badge">Opcion 3</span> Panqueques proteicos de chocolate <span class="option-source">plan-nutricional.pdf</span><span class="option-cals">474 kcal</span></summary>
+<div class="detail-content">
+<table class="ingredient-table">
+<thead><tr><th>Ingrediente</th><th>Cantidad</th><th>P (g)</th><th>C (g)</th><th>F (g)</th><th>Fibra (g)</th><th>Cal</th></tr></thead>
+<tbody>
+<tr><td>Huevo entero</td><td>1 unid. (~50g)</td><td>6.3</td><td>0.4</td><td>4.8</td><td>0</td><td>72</td></tr>
+<tr><td>Clara de huevo</td><td>1 unid. (~33g)</td><td>3.6</td><td>0.2</td><td>0.1</td><td>0</td><td>17</td></tr>
+<tr><td>Proteina Star Nutrition</td><td>10g (1 cda)</td><td>8.3</td><td>0.9</td><td>0.6</td><td>0</td><td>42</td></tr>
+<tr><td>Leche La Serenisima parc. desc.</td><td>30ml (2 cdas)</td><td>0.9</td><td>1.4</td><td>0.3</td><td>0</td><td>12</td></tr>
+<tr><td>Avena instantanea Quaker</td><td>50g (5 cdas)</td><td>6.5</td><td>28.0</td><td>4.0</td><td>5.5</td><td>174</td></tr>
+<tr><td>Banana chica</td><td>1 unid. (~90g)</td><td>0.7</td><td>20.7</td><td>0.3</td><td>2.3</td><td>87</td></tr>
+<tr><td>Semillas de chia</td><td>5g (1 cdita)</td><td>0.8</td><td>2.1</td><td>1.5</td><td>1.7</td><td>24</td></tr>
+<tr><td>Cacao amargo</td><td>6g (2 cditas)</td><td>1.2</td><td>3.5</td><td>0.8</td><td>2.2</td><td>14</td></tr>
+<tr><td>Pasta de mani</td><td>5g (1 cdita)</td><td>1.1</td><td>1.2</td><td>2.5</td><td>0.3</td><td>32</td></tr>
+<tr class="total-row"><td>TOTAL</td><td></td><td>29.4</td><td>58.4</td><td>14.9</td><td>12.0</td><td>474</td></tr>
+</tbody></table>
+</div></details>
+
+<details><summary><span class="option-badge">Opcion 4</span> Tostadas francesas <span class="option-source">recetario.pdf</span><span class="option-cals">504 kcal</span></summary>
+<div class="detail-content">
+<table class="ingredient-table">
+<thead><tr><th>Ingrediente</th><th>Cantidad</th><th>P (g)</th><th>C (g)</th><th>F (g)</th><th>Fibra (g)</th><th>Cal</th></tr></thead>
+<tbody>
+<tr><td>Huevo entero</td><td>1 unid. (~50g)</td><td>6.3</td><td>0.4</td><td>4.8</td><td>0</td><td>72</td></tr>
+<tr><td>Clara de huevo</td><td>1 unid. (~33g)</td><td>3.6</td><td>0.2</td><td>0.1</td><td>0</td><td>17</td></tr>
+<tr><td>Proteina Star Nutrition</td><td>15g (1/2 scoop)</td><td>12.5</td><td>1.3</td><td>0.9</td><td>0</td><td>64</td></tr>
+<tr><td>Leche La Serenisima parc. desc.</td><td>30ml (2 cdas)</td><td>0.9</td><td>1.4</td><td>0.3</td><td>0</td><td>12</td></tr>
+<tr><td>Pan integral (molde)</td><td>3 rebanadas (75g)</td><td>9.4</td><td>32.0</td><td>2.6</td><td>4.5</td><td>189</td></tr>
+<tr><td>Banana chica</td><td>1 unid. (~90g)</td><td>0.7</td><td>20.7</td><td>0.3</td><td>2.3</td><td>87</td></tr>
+<tr><td>Pasta de mani</td><td>10g (2 cditas)</td><td>2.2</td><td>2.4</td><td>5.0</td><td>0.5</td><td>63</td></tr>
+<tr class="total-row"><td>TOTAL</td><td></td><td>35.6</td><td>58.4</td><td>14.0</td><td>7.3</td><td>504</td></tr>
+</tbody></table>
+<p style="font-size:.8rem;color:var(--muted);margin-top:8px">Con pan blanco (3 rebanadas 25g): P=32.9 / C=63.5 / F=13.9 / Fibra=4.9 / Cal=515. Opcion con mayores calorias del grupo.</p>
+</div></details>
+
+<details><summary><span class="option-badge">Opcion 5</span> Licuado proteico <span class="option-source">recetario.pdf</span><span class="option-cals">495 kcal</span></summary>
+<div class="detail-content">
+<table class="ingredient-table">
+<thead><tr><th>Ingrediente</th><th>Cantidad</th><th>P (g)</th><th>C (g)</th><th>F (g)</th><th>Fibra (g)</th><th>Cal</th></tr></thead>
+<tbody>
+<tr><td>Leche La Serenisima parc. desc.</td><td>300ml (1 taza grande)</td><td>9.0</td><td>14.4</td><td>3.0</td><td>0</td><td>120</td></tr>
+<tr><td>Proteina Star Nutrition</td><td>30g (1 scoop)</td><td>25.0</td><td>2.6</td><td>1.8</td><td>0</td><td>127</td></tr>
+<tr><td>Banana grande</td><td>1 unid. (~120g)</td><td>0.9</td><td>27.6</td><td>0.3</td><td>3.1</td><td>116</td></tr>
+<tr><td>Pasta de mani</td><td>10g (1 cda)</td><td>2.2</td><td>2.4</td><td>5.0</td><td>0.5</td><td>63</td></tr>
+<tr><td>Avena instantanea Quaker</td><td>20g (2 cdas)</td><td>2.6</td><td>11.2</td><td>1.6</td><td>2.2</td><td>69</td></tr>
+<tr class="total-row"><td>TOTAL</td><td></td><td>39.7</td><td>58.2</td><td>11.7</td><td>5.8</td><td>495</td></tr>
+</tbody></table>
+<p style="font-size:.8rem;color:var(--muted);margin-top:8px">Mayor proteina del grupo (39.7g) debido al scoop completo de whey (30g) y 300ml de leche.</p>
+</div></details>
+
+<details><summary><span class="option-badge">Opcion 6</span> Brownie proteico en taza <span class="option-source">recetario.pdf</span><span class="option-cals">451 kcal</span></summary>
+<div class="detail-content">
+<table class="ingredient-table">
+<thead><tr><th>Ingrediente</th><th>Cantidad</th><th>P (g)</th><th>C (g)</th><th>F (g)</th><th>Fibra (g)</th><th>Cal</th></tr></thead>
+<tbody>
+<tr><td>Huevo entero</td><td>1 unid. (~50g)</td><td>6.3</td><td>0.4</td><td>4.8</td><td>0</td><td>72</td></tr>
+<tr><td>Clara de huevo</td><td>1 unid. (~33g)</td><td>3.6</td><td>0.2</td><td>0.1</td><td>0</td><td>17</td></tr>
+<tr><td>Leche La Serenisima parc. desc.</td><td>30ml (2 cdas)</td><td>0.9</td><td>1.4</td><td>0.3</td><td>0</td><td>12</td></tr>
+<tr><td>Avena instantanea Quaker</td><td>60g (6 cdas)</td><td>7.8</td><td>33.6</td><td>4.7</td><td>6.6</td><td>208</td></tr>
+<tr><td>Banana chica</td><td>1 unid. (~90g)</td><td>0.7</td><td>20.7</td><td>0.3</td><td>2.3</td><td>87</td></tr>
+<tr><td>Cacao amargo</td><td>10g (1 cda)</td><td>2.0</td><td>5.8</td><td>1.4</td><td>3.7</td><td>23</td></tr>
+<tr><td>Pasta de mani</td><td>5g (1 cdita)</td><td>1.1</td><td>1.2</td><td>2.5</td><td>0.3</td><td>32</td></tr>
+<tr class="total-row"><td>TOTAL</td><td></td><td>22.4</td><td>63.3</td><td>14.1</td><td>12.9</td><td>451</td></tr>
+</tbody></table>
+<p style="font-size:.8rem;color:var(--muted);margin-top:8px">Mayores carbohidratos (63.3g) y mayor fibra (12.9g) del grupo por 60g de avena + cacao. No contiene proteina en polvo.</p>
+</div></details>
+</section><section>
+<h2>Hallazgos Principales</h2>
+<div class="card">
+<div class="finding"><div class="finding-num">1</div><div class="finding-text"><strong>Las opciones no son nutricionalmente equivalentes.</strong> El rango de proteina es de 19.2g (de 20.5g a 39.7g), el de carbohidratos 20.3g (de 43.0g a 63.3g), y el de calorias 140 kcal (de 364 a 504). Estas diferencias superan ampliamente un margen de error razonable.</div></div>
+<div class="finding"><div class="finding-num">2</div><div class="finding-text"><strong>La proteina en polvo es la principal fuente de variacion.</strong> Las opciones usan entre 0g (Omelette, Brownie) y 30g (Licuado) de whey protein, lo que genera una diferencia directa de hasta 25g de proteina. Ademas, la Opcion 5 (Licuado) usa 300ml de leche vs. 30ml en otras opciones.</div></div>
+<div class="finding"><div class="finding-num">3</div><div class="finding-text"><strong>La cantidad de avena impulsa la variacion de carbohidratos.</strong> Las opciones van de 0g (Omelette, que usa pan) a 60g (Brownie) de avena. Cada 10g de avena Quaker aporta 5.6g de carbohidratos adicionales, 1.3g de proteina, 1.1g de fibra y 35 kcal.</div></div>
+<div class="finding"><div class="finding-num">4</div><div class="finding-text"><strong>En un plan de 2,000 kcal/dia, la diferencia de 140 kcal representa el 7% del total diario.</strong> Elegir la Opcion 4 (504 kcal) en lugar de la Opcion 1 (364 kcal) equivale a agregar o quitar una colacion completa.</div></div>
+<div class="finding"><div class="finding-num">5</div><div class="finding-text"><strong>La grasa es el macronutriente mas consistente</strong> (rango de solo 4.3g), lo que sugiere que la estandarizacion funciona mejor con las fuentes de grasa (aceite, pasta de mani, semillas).</div></div>
+<div class="finding"><div class="finding-num">6</div><div class="finding-text"><strong>Discrepancia en la tabla de equivalencias:</strong> la tabla indica que 10g de cacao amargo = 5g de grasa. Segun USDA FoodData Central, 10g de cacao en polvo sin azucar contienen 1.4g de grasa (3.6 veces menor al valor indicado).</div></div>
+</div>
+</section>
+
+<section>
+<h2>Fuentes de Datos y Metodologia</h2>
+<div class="card">
+<h3>Bases de datos utilizadas</h3>
+<ul style="font-size:.88rem;margin:8px 0 16px 20px">
+<li><strong>USDA FoodData Central</strong> (SR Legacy y Foundation Foods): huevo, clara, banana, pasta de mani, cacao amargo, pan integral, pan blanco, semillas de chia, almendras, nueces, aceite de oliva</li>
+<li><strong>FatSecret Argentina</strong>: Star Nutrition Premium Whey Protein, Quaker Avena Instantanea (etiqueta Argentina), La Serenisima Leche Parcialmente Descremada</li>
+</ul>
+<h3>Productos especificos del paciente</h3>
+<ul style="font-size:.88rem;margin:8px 0 16px 20px">
+<li><strong>Leche:</strong> La Serenisima parcialmente descremada (envase verde) &mdash; P=3.0g, C=4.8g, F=1.0g por 100ml</li>
+<li><strong>Yogur:</strong> Casero, elaborado con leche parc. desc. + cultivo de yogur griego &mdash; mismos macros que la leche base</li>
+<li><strong>Avena:</strong> Quaker Avena Instantanea &mdash; P=13g, C=56g, F=7.9g, Fibra=11g por 100g</li>
+<li><strong>Proteina:</strong> Star Nutrition Premium Whey &mdash; P=25g, C=2.6g, F=1.8g por scoop (30g)</li>
+<li><strong>Pan:</strong> Pan de molde integral y blanco, 25g por rebanada</li>
+<li><strong>Frutos secos:</strong> Mezcla 50/50 almendras + nueces</li>
+<li><strong>Semillas:</strong> Chia</li>
+<li><strong>Huevos:</strong> Tamano regular (~50g por unidad)</li>
+</ul>
+<h3>Supuestos</h3>
+<ul style="font-size:.88rem;margin:8px 0 0 20px">
+<li>Banana utilizada como fruta para todas las opciones de desayuno</li>
+<li>Banana "chica" (80-100g) estimada en 90g; banana "grande" (+100g) en 120g</li>
+<li>Valores redondeados a 1 decimal</li>
+<li>Leche La Serenisima parc. desc. utilizada en todas las recetas que indican leche o bebida vegetal</li>
+<li>Todas las recetas calculadas con ingredientes completos tal como fueron prescritas</li>
+</ul>
+</div>
+</section>
+
+</div>
+<footer>Analisis generado el 3 de abril de 2026 &nbsp;|&nbsp; Datos: USDA FoodData Central y FatSecret Argentina &nbsp;|&nbsp; Este documento es informativo y no constituye una prescripcion medica ni nutricional.</footer>
+</body>
+</html>
