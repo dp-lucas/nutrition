@@ -94,21 +94,6 @@
   .carb-options .meal-foods li::before { color: var(--carbs); }
   .carb-options .opt-macros { color: var(--text-muted); font-weight: 400; font-size: 0.78rem; }
 
-  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem; }
-  .info-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; }
-  .info-card h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.75rem; }
-  .info-card ul { list-style: none; }
-  .info-card li { font-size: 0.82rem; color: var(--text-muted); padding: 0.25rem 0 0.25rem 1.2rem; position: relative; }
-  .info-card li::before { content: '→'; position: absolute; left: 0; color: var(--accent); }
-  .info-card li strong { color: var(--text); font-weight: 500; }
-
-  .shopping-list { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; margin-top: 2rem; }
-  .shopping-list h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.75rem; }
-  .shopping-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem 2rem; }
-  .shopping-grid li { font-size: 0.82rem; color: var(--text-muted); padding: 0.25rem 0 0.25rem 1.2rem; position: relative; list-style: none; }
-  .shopping-grid li::before { content: '☐'; position: absolute; left: 0; color: var(--green); font-size: 0.75rem; }
-  .shopping-grid li strong { color: var(--text); font-weight: 500; }
-
   .notes-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; margin-top: 2rem; }
   .notes-section h3 { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.75rem; }
   .notes-section ul { list-style: none; padding: 0; }
@@ -149,13 +134,6 @@
     .summary-label { font-size: 0.7rem; }
     .summary-target { font-size: 0.72rem; }
     .hydration-bar { margin-left: 1.25rem; font-size: 0.82rem; padding: 0.6rem 0.75rem; }
-    .info-grid { grid-template-columns: 1fr; gap: 1rem; }
-    .info-card { padding: 1rem; }
-    .info-card h3 { font-size: 0.88rem; }
-    .info-card li { font-size: 0.85rem; padding: 0.3rem 0 0.3rem 1.2rem; }
-    .shopping-list { padding: 1rem; }
-    .shopping-grid { grid-template-columns: 1fr; gap: 0.15rem; }
-    .shopping-grid li { font-size: 0.85rem; padding: 0.3rem 0 0.3rem 1.2rem; }
     .notes-section { padding: 1rem; }
     .notes-section h3 { font-size: 0.88rem; }
     .notes-section li { font-size: 0.85rem; line-height: 1.5; padding: 0.3rem 0 0.3rem 1.2rem; }
@@ -166,7 +144,7 @@
     footer { font-size: 0.8rem; margin-top: 2rem; padding-top: 1.5rem; }
     footer p { margin-bottom: 0.4rem; line-height: 1.5; }
   }
-  @media print { body { background: #fff; color: #111; } .meal-card, .info-card, .shopping-list, .notes-section, .philosophy { border-color: #ddd; background: #f9f9f9; } .science-note { color: #888; background: #f5f5f5; } }
+  @media print { body { background: #fff; color: #111; } .meal-card, .notes-section, .philosophy { border-color: #ddd; background: #f9f9f9; } .science-note { color: #888; background: #f5f5f5; } }
 </style>
 </head>
 <body>
@@ -178,7 +156,7 @@
   <div class="patient-bar">
     <span>Lucas Di Pietro</span>
     <span>95 kg · 177 cm · 35 años</span>
-    <span>Porciones del nutricionista · 120g+ proteína</span>
+    <span>Porciones del nutricionista · 165g+ proteína</span>
   </div>
 </header>
 
@@ -206,9 +184,9 @@
   <p class="section-sub">Lunes a domingo — misma comida, científicamente distribuida.</p>
 
   <div class="targets-bar">
-    <span class="target-pill cal">~1.842 kcal</span>
-    <span class="target-pill protein">174g proteína</span>
-    <span class="target-pill carbs">169g carbos</span>
+    <span class="target-pill cal">~1.860 kcal</span>
+    <span class="target-pill protein">~170g proteína</span>
+    <span class="target-pill carbs">~174g carbos</span>
     <span class="target-pill fat">55g grasa</span>
   </div>
 
@@ -274,7 +252,7 @@
         <span class="macro-tag p">46g P</span>
         <span class="macro-tag c">14g C</span>
         <span class="macro-tag f">21g G</span>
-        <span class="macro-tag k">415 kcal</span>
+        <span class="macro-tag k">429 kcal</span>
       </div>
     </div>
 
@@ -319,10 +297,10 @@
         </ul>
       </div>
       <div class="meal-macros">
-        <span class="macro-tag p">49–56g P</span>
+        <span class="macro-tag p">48–55g P</span>
         <span class="macro-tag c">34–44g C</span>
         <span class="macro-tag f">13g G</span>
-        <span class="macro-tag k">442–510 kcal</span>
+        <span class="macro-tag k">450–510 kcal</span>
       </div>
       <div class="supplements-note">+ Magnesio Glicinato</div>
     </div>
@@ -334,17 +312,17 @@
     <div class="summary-title">Totales Diarios</div>
     <div class="summary-grid">
       <div class="summary-item cal-item">
-        <div class="summary-value cal-v">1.842</div>
+        <div class="summary-value cal-v">~1.860</div>
         <div class="summary-label">kcal</div>
         <div class="summary-target">objetivo 2.000</div>
       </div>
       <div class="summary-item p-item">
-        <div class="summary-value p-v">174g</div>
+        <div class="summary-value p-v">~170g</div>
         <div class="summary-label">proteína</div>
         <div class="summary-target">mín 120g</div>
       </div>
       <div class="summary-item c-item">
-        <div class="summary-value c-v">169g</div>
+        <div class="summary-value c-v">~174g</div>
         <div class="summary-label">carbos</div>
       </div>
       <div class="summary-item f-item">
@@ -353,6 +331,12 @@
       </div>
     </div>
   </div>
+
+  <div class="hydration-bar">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+    Hidratación: 3,5 L diarios mínimo · 500 ml antes del entreno · 500 ml durante · 500 ml después
+  </div>
+
 
 </section>
 

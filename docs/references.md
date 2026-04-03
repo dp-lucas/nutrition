@@ -49,3 +49,8 @@ Each entry follows this structure:
 - **Source:** British Journal of Nutrition, 2014; 111(3): 515–523
 - **Key finding:** Co-ingesting fat with casein protein does not impair the post-prandial muscle protein synthetic response
 - **Used in:** Supporting evidence for post-workout fat tolerance (`example-days.html`)
+
+### [7] USDA FoodData Central — Chicken Breast Raw (FDC #171077)
+- **Source:** U.S. Department of Agriculture, FoodData Central, SR Legacy
+- **Key finding:** Raw skinless boneless chicken breast: 21–22.5g protein per 100g, 2.6g fat per 100g, 114–120 kcal per 100g. Used to verify dinner protein calculations (200g raw ≈ 44g protein)
+- **Used in:** Dinner macro audit and correction (`example-days.html`)
