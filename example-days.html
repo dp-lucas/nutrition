@@ -88,6 +88,11 @@
   .hydration-bar { display: flex; align-items: center; gap: 0.5rem; background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.2); border-radius: 8px; padding: 0.6rem 1rem; margin-top: 0.75rem; margin-left: 1.75rem; font-size: 0.8rem; color: #38bdf8; }
   .hydration-bar svg { flex-shrink: 0; }
   .meal-number { display: inline-block; font-size: 0.6rem; font-weight: 700; background: var(--accent-bg); color: var(--accent); border-radius: 4px; padding: 0.1rem 0.4rem; margin-right: 0.4rem; vertical-align: middle; letter-spacing: 0.04em; }
+  .carb-options { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; margin: 0.5rem 0 0.85rem 0; }
+  .carb-options-title { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--carbs); font-weight: 600; margin-bottom: 0.4rem; }
+  .carb-options .meal-foods { margin-bottom: 0; }
+  .carb-options .meal-foods li::before { color: var(--carbs); }
+  .carb-options .opt-macros { color: var(--text-muted); font-weight: 400; font-size: 0.78rem; }
 
   .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem; }
   .info-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; }
@@ -154,6 +159,9 @@
     .notes-section { padding: 1rem; }
     .notes-section h3 { font-size: 0.88rem; }
     .notes-section li { font-size: 0.85rem; line-height: 1.5; padding: 0.3rem 0 0.3rem 1.2rem; }
+    .carb-options { padding: 0.65rem 0.75rem; }
+    .carb-options-title { font-size: 0.78rem; }
+    .carb-options .meal-foods li { font-size: 0.85rem; line-height: 1.5; padding: 0.25rem 0 0.25rem 1rem; }
     .divider { margin: 1.75rem 0; }
     footer { font-size: 0.8rem; margin-top: 2rem; padding-top: 1.5rem; }
     footer p { margin-bottom: 0.4rem; line-height: 1.5; }
@@ -297,18 +305,25 @@
     <!-- 5. CENA -->
     <div class="meal-card">
       <div class="meal-time">20:30 — Última comida</div>
-      <div class="meal-name"><span class="meal-number">5</span> Cena — Pollo + Lentejas con Arroz</div>
+      <div class="meal-name"><span class="meal-number">5</span> Cena — Pollo en Air Fryer + Carbohidratos</div>
       <ul class="meal-foods">
         <li><strong>200g pechuga de pollo</strong> (crudo — sal, pimienta, pimentón — air fryer)</li>
-        <li><strong>100g lentejas cocidas</strong> (hervidas desde secas)</li>
-        <li><strong>50g arroz cocido</strong> (batch semanal o arroz instantáneo)</li>
-        <li><strong>2 cditas de aceite de oliva</strong> (sobre el pollo o las lentejas)</li>
+        <li><strong>2 cditas de aceite de oliva</strong> (sobre el pollo)</li>
       </ul>
+      <div class="carb-options">
+        <div class="carb-options-title">Elegí una porción de carbohidratos</div>
+        <ul class="meal-foods">
+          <li><strong>100g lentejas cocidas + 50g arroz cocido</strong> <span class="opt-macros">— 10g P · 34g C · 181 cal</span></li>
+          <li><strong>125g arroz cocido</strong> (50g crudo) <span class="opt-macros">— 3g P · 39g C · 180 cal</span></li>
+          <li><strong>200g papa</strong> (hervida o al horno) <span class="opt-macros">— 4g P · 34g C · 154 cal</span></li>
+          <li><strong>140g pasta cocida</strong> (60g cruda) <span class="opt-macros">— 7g P · 44g C · 222 cal</span></li>
+        </ul>
+      </div>
       <div class="meal-macros">
-        <span class="macro-tag p">56g P</span>
-        <span class="macro-tag c">34g C</span>
+        <span class="macro-tag p">49–56g P</span>
+        <span class="macro-tag c">34–44g C</span>
         <span class="macro-tag f">13g G</span>
-        <span class="macro-tag k">475 kcal</span>
+        <span class="macro-tag k">442–510 kcal</span>
       </div>
       <div class="supplements-note">+ Magnesio Glicinato</div>
     </div>
